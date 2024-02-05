@@ -24,18 +24,37 @@ export const getProductById = async (req, res) => {
 };
 
 export const createProduct = async (req, res) => {
- try {
-    const image = req.file ? req.file.path : null;
-    const { product } = req.body; 
-    product.imagePath = image; 
-    const newProduct = new Product(product); 
-    const savedProduct = await newProduct.save();
-    res.status(201).json(savedProduct);
- } catch (error) {
-    console.error("Error creating product:", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
- }
-};
+   // Ensure the user is authenticated and has the 'admin' role
+   if (!req.user || req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Permission denied' });
+   }
+  
+   // Extract the file and product data from the request
+   const image = req.file ? req.file.path : null;
+   const { product } = req.body;
+  
+   // Validate the product data
+   if (!product || !product.title || !product.description || !product.price) {
+      return res.status(400).json({ error: 'Missing required product fields' });
+   }
+  
+   try {
+      // Create a new Product document
+      const newProduct = new Product({
+        ...product,
+        imagePath: image,
+      });
+  
+      // Save the new product to the database
+      const savedProduct = await newProduct.save();
+  
+      res.status(201).json(savedProduct);
+   } catch (error) {
+      console.error("Error creating product:", error.message);
+      res.status(500).json({ error: "Internal Server Error" });
+   }
+  };
+  
 
 export const updateProduct = async (req, res) => {
     try {

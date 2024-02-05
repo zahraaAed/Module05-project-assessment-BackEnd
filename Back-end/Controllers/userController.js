@@ -2,8 +2,10 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../Models/User.js';
 
+
+
 export const userRegister = async (req, res) => {
-  const { username, password, confirmPassword } = req.body;
+  const { username, password, role } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10); // Here we hash the passsword
 
   try {
@@ -13,10 +15,6 @@ export const userRegister = async (req, res) => {
       return res.status(400).json({ message: 'Username already in use!' });
     }
 
-    // Here we check if the password and confirmPassword match
-    if (password !== confirmPassword) {
-      return res.status(400).json({ message: 'Passwords do not match!' });
-    }
 
     // Here we register the user
     const user = await User.create({

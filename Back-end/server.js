@@ -6,7 +6,7 @@ import cookieParser from 'cookie-parser';
 
 import productRoutes from "./Routes/productRoute.js";
 import userRoutes from "./Routes/userRoute.js";
-
+import orderRoute from "./Routes/orderRoute.js";
 dotenv.config();
 
 const PORT = process.env.PORT || 4000;
@@ -22,6 +22,7 @@ app.use(cors());
 app.use("/images", express.static("images"));
 app.use("/api/product", productRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/order",orderRoute)
 mongoose
   .connect(process.env.MONGO)
   .then(() => {

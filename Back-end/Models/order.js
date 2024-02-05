@@ -42,4 +42,6 @@ const OrderSchema = new Schema(
 
 OrderSchema.plugin(autopopulate);
 
-export default model("Order", OrderSchema);
+const Order = model('order', OrderSchema);
+
+export default Order;

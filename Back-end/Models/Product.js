@@ -19,12 +19,7 @@ const ProductSchema = new Schema({
     type: String,
     required: true,
   },
-users: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    autopopulate: true,
-    allownull:true,
-  },
+
 
   
 }, {timestamps: true,});
